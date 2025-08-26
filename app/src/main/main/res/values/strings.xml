@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">HashinInfo</string>
+
+    <string name="campus_map">학교 지도</string>
+    <string name="schedule">학사 일정</string>
+    <string name="number">전화 번호</string>
+    <string name="number_ext">교내 전화번호</string>
+    <string name="number_pro">교수 전화번호</string>
+
+    <!--Menu Connect Link-->
+    <string name="homepage">학교 홈페이지</string>
+    <string name="hs_guide">새내기한신가이드</string>
+    <string name="lms">lms</string>
+    <string name="e_room">이룸시스템</string>
+    <string name="attend">전자출결</string>
+    <string name="sugang">수강신청</string>
+
+    <!-- crawling url-->
+    <string name="number_ext_url">https://hs.ac.kr/kor/4986/subview.do</string>
+    <string name="number_pro_url">https://hs.ac.kr/kor/4987/subview.do</string>
+    <string name="number_schedule_url">https://hs.ac.kr/kor/4837/subview.do</string>
+</resources>
