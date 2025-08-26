@@ -3,21 +3,6 @@ package com.dwinging.hanshininfo_refactoring.view.campusMap
 import com.dwinging.hanshininfo_refactoring.R
 import com.dwinging.hanshininfo_refactoring.data.dao.BuildingWithAmenities
 
-data class BuildingInfoItem(
-    val num: Int,
-    val name: String,
-    val img: Int,
-    val amenity: List<Int>
-)
-
-data class Coordinate(
-    val num: Int,
-    val x1: Int,
-    val y1: Int,
-    val x2: Int,
-    val y2: Int
-)
-
 data class BuildingDataSheet(val state: Boolean, val buildingInfo: BuildingWithAmenities?)
 
 enum class BuildingName(private val number: Int, val imageRes: Int) {
