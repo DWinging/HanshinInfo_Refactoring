@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dwinging.hanshininfo_refactoring.data.prefs.PrefsManager
 import com.dwinging.hanshininfo_refactoring.splash.SplashScreen
 import com.dwinging.hanshininfo_refactoring.ui.theme.HanshinInfo
 
@@ -15,6 +16,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        PrefsManager.init(this)
+
         setContent {
             HanshinInfo(dynamicColor = false) {
                 MyApp()

@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.dwinging.hanshininfo_refactoring.ui.theme.ComponentTextStyles
@@ -53,11 +54,15 @@ fun ScheduleView() {
             ) { Text("▶") }
         }
         LazyColumn(Modifier.fillMaxWidth()) {
+            val date = LocalDate.of(date.value.year, date.value.monthValue, 1)
+            val firstDayOfWeek: Int = date.dayOfWeek.value % 7
+
             items(dayList.size) { day ->
+                val color = getDayOfWeekColor((firstDayOfWeek + day) % 7)
                 Row (
                     ComponentTextStyles.ContentRowStyle
                 ){
-                    TextRow( "${day + 1}일", "${dayList[day].trimEnd()}")
+                    TextRow( "${day + 1}일", "${dayList[day].trimEnd()}", color)
                 }
             }
             item {
@@ -68,11 +73,15 @@ fun ScheduleView() {
 }
 
 @Composable
-private fun TextRow(label:String, value:String) {
+private fun TextRow(
+    label: String,
+    value: String,
+    color: Color
+) {
     Row {
         Text(
             label,
-            style = ComponentTextStyles.LabelText,
+            style = ComponentTextStyles.LabelText.copy(color = color),
             modifier = ComponentTextStyles.LabelPadding
         )
         Text(

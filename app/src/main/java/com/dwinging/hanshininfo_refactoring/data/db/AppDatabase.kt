@@ -36,6 +36,7 @@ import java.time.temporal.TemporalAdjusters
     version = 1,
     exportSchema = true
 )
+
 @TypeConverters(LocalDateConverter::class, NumberTypeConverter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun buildingDao(): BuildingDAO
