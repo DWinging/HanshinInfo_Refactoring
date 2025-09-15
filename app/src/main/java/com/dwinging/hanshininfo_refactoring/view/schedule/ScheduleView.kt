@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.room.util.TableInfo
 import com.dwinging.hanshininfo_refactoring.ui.theme.ComponentTextStyles
 import com.dwinging.hanshininfo_refactoring.ui.theme.Purple700
 import java.time.LocalDate
