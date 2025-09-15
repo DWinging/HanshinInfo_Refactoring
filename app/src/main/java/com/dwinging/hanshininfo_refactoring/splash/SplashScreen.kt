@@ -1,6 +1,7 @@
 package com.dwinging.hanshininfo_refactoring.splash
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.tween
@@ -60,12 +61,14 @@ fun SplashScreen(navController: NavHostController) {
                 animationSpec = tween(1000, easing = EaseOutBounce)
             )
             if(check) {
+                Log.d("start_App", "Success")
                 delay(1500)
                 navController.navigate("main") {
                     popUpTo("splash") { inclusive = true }
                 }
             }
             else {
+                Log.d("start_App", "Fail")
                 showUpdateDialog(context, message)
             }
         }

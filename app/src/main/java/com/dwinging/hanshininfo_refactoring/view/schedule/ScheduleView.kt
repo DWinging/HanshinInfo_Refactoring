@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.room.util.TableInfo
 import com.dwinging.hanshininfo_refactoring.ui.theme.ComponentTextStyles
 import com.dwinging.hanshininfo_refactoring.ui.theme.Purple700
 import java.time.LocalDate
@@ -35,6 +36,7 @@ fun ScheduleView() {
 
     val dayList = inputEvent(eventList.value, date.value)
     Column {
+        // 페이지 상단
         Row (
             modifier = Modifier.fillMaxWidth().padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -53,16 +55,21 @@ fun ScheduleView() {
                 enabled = date.value.monthValue < 12
             ) { Text("▶") }
         }
+        
+        // 달력 정보
         LazyColumn(Modifier.fillMaxWidth()) {
             val date = LocalDate.of(date.value.year, date.value.monthValue, 1)
             val firstDayOfWeek: Int = date.dayOfWeek.value % 7
 
             items(dayList.size) { day ->
+                // 날짜 색상
                 val color = getDayOfWeekColor((firstDayOfWeek + day) % 7)
+                
+                // 일정 표기
                 Row (
                     ComponentTextStyles.ContentRowStyle
                 ){
-                    TextRow( "${day + 1}일", "${dayList[day].trimEnd()}", color)
+                    TextRow( "${day + 1}일", dayList[day], color)
                 }
             }
             item {
@@ -75,7 +82,7 @@ fun ScheduleView() {
 @Composable
 private fun TextRow(
     label: String,
-    value: String,
+    schedules: ArrayList<String>,
     color: Color
 ) {
     Row {
@@ -84,10 +91,14 @@ private fun TextRow(
             style = ComponentTextStyles.LabelText.copy(color = color),
             modifier = ComponentTextStyles.LabelPadding
         )
-        Text(
-            text = value,
-            style = ComponentTextStyles.ValueText,
-            modifier = ComponentTextStyles.ValuePadding
-        )
+        Column {
+            schedules.forEach {  s ->
+                Text(
+                    text = s,
+                    style = ComponentTextStyles.ValueText,
+                    modifier = ComponentTextStyles.ValuePadding
+                )
+            }
+        }
     }
 }

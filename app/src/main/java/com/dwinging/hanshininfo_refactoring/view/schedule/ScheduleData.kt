@@ -23,10 +23,10 @@ suspend fun getEventList(date: LocalDate, context: Context): List<EventList> {
     return scheduleDAO.findSchedule(startOfMonth, endOfMonth)
 }
 
-fun inputEvent(eventList: List<EventList>, date: LocalDate): Array<StringBuilder> {
+fun inputEvent(eventList: List<EventList>, date: LocalDate): Array<ArrayList<String>> {
     val yearMonth = YearMonth.from(date)
     val daysInMonth = yearMonth.lengthOfMonth()
-    val dayArray = Array<StringBuilder>(daysInMonth) { StringBuilder() }
+    val dayArray = Array(daysInMonth) { ArrayList<String>() }
 
     eventList.forEach { event ->
         val start = event.startDate
@@ -36,7 +36,7 @@ fun inputEvent(eventList: List<EventList>, date: LocalDate): Array<StringBuilder
         val endDay = end.dayOfMonth.coerceAtMost(daysInMonth)
 
         for(day in startDay .. endDay) {
-            dayArray[day-1].appendLine(event.event)
+            dayArray[day-1].add(event.event)
         }
     }
     return dayArray
