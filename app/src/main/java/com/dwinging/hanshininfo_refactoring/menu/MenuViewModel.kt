@@ -17,17 +17,19 @@ class MenuViewModel: ViewModel() {
     private val _expandedGroup = mutableStateMapOf<MainMenuList, Boolean>()
     val expandedMap: SnapshotStateMap<MainMenuList, Boolean> get() = _expandedGroup
 
+    // MainMenu 선택 여부
     fun mainMenuSelected(menu: MainMenuList) {
         _selectedMenu.value = menu
     }
 
+    // Sub 메뉴 확장 여부
     fun toggleExpand(menu: MainMenuList) {
         _expandedGroup[menu] = _expandedGroup[menu] != true
     }
-
+    
     fun delayedCollapse() {
         viewModelScope.launch {
-            delay(100) // or 100~200ms 정도도 충분함
+            delay(100)
             collapseAll()
         }
     }

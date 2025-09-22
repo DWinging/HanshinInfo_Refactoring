@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f1c14285fbcea9971150afb5047a9d3d",
+    "identityHash": "399bc1c9a993d82aebd6f180cd2fc9e6",
     "entities": [
       {
         "tableName": "Building",
@@ -190,11 +190,41 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "Holiday",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dateName` TEXT NOT NULL, `locdate` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "dateName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "locdate",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f1c14285fbcea9971150afb5047a9d3d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '399bc1c9a993d82aebd6f180cd2fc9e6')"
     ]
   }
 }

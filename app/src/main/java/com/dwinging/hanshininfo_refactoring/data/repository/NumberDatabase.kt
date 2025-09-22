@@ -23,7 +23,7 @@ suspend fun insertNumberData(context: Context, numberDAO: NumberDAO, type: Numbe
             for(row in rows) {
                 val tds = row.select("td")
                 if(tds.size == 4) {
-                    val emptyTd = Element("td").text("") // 빈 td 생성
+                    val emptyTd = Element("td").text("")
                     tds.add(2, emptyTd)
                 }
                 numberList.add(

@@ -1,6 +1,7 @@
 package com.dwinging.hanshininfo_refactoring.view.schedule
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,9 +30,16 @@ fun ScheduleView() {
     val context = LocalContext.current.applicationContext as Application
     val date = remember { mutableStateOf(LocalDate.now()) }
     val eventList = remember { mutableStateOf<List<EventList>>(emptyList()) }
+    val holiDaySet = remember { mutableStateSetOf<Int>() }
 
     LaunchedEffect(date.value) {
         eventList.value = getEventList(date.value, context)
+        val holidays = getHoliDayList(date.value, context)
+        val temp: Set<Int> = holidays.map { it.date.dayOfMonth }.toSet()
+        Log.d("dayTest", temp.joinToString { " " })
+        Log.d("dayTest", date.value.toString())
+        holiDaySet.clear()
+        holiDaySet.addAll(temp)
     }
 
     val dayList = inputEvent(eventList.value, date.value)
@@ -57,12 +66,12 @@ fun ScheduleView() {
         
         // 달력 정보
         LazyColumn(Modifier.fillMaxWidth()) {
-            val date = LocalDate.of(date.value.year, date.value.monthValue, 1)
-            val firstDayOfWeek: Int = date.dayOfWeek.value % 7
+            val firstDay = LocalDate.of(date.value.year, date.value.monthValue, 1)
+            val firstDayOfWeek: Int = firstDay.dayOfWeek.value % 7
 
             items(dayList.size) { day ->
                 // 날짜 색상
-                val color = getDayOfWeekColor((firstDayOfWeek + day) % 7)
+                val color = getDayOfWeekColor(if(holiDaySet.contains(day + 1)) 0 else (firstDayOfWeek + day) % 7)
                 
                 // 일정 표기
                 Row (

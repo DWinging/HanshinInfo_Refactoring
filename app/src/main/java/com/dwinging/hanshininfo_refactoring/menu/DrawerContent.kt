@@ -31,12 +31,13 @@ fun DrawerContent(viewModel: MenuViewModel = viewModel()) {
         color = Color.White
     ){
         LazyColumn {
-            item { SettingImage() }
+            item { DrawImage() }
 
             // MainMenu
             item { MainMenu(onMenuClick = { menu -> viewModel.mainMenuSelected(menu) }, viewModel) }
 
-            item { SettingSpacer() }
+            // 구분선(MainMenu / SubMenu)
+            item { DrawSpacer() }
 
             // SubMenu - Url, App
             item { MoveMenu() }
@@ -45,7 +46,7 @@ fun DrawerContent(viewModel: MenuViewModel = viewModel()) {
 }
 
 @Composable
-fun SettingImage() {
+fun DrawImage() {
     Image(
         painter = painterResource(id = R.drawable.mascot_image),
         contentDescription = "MenuTopImage",
@@ -56,7 +57,7 @@ fun SettingImage() {
 }
 
 @Composable
-fun SettingSpacer() {
+fun DrawSpacer() {
     Spacer(modifier = Modifier
         .padding(top = 10.dp, bottom = 10.dp)
         .height(1.dp)

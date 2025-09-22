@@ -1,11 +1,14 @@
 package com.dwinging.hanshininfo_refactoring.view.schedule
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import com.dwinging.hanshininfo_refactoring.R
 import com.dwinging.hanshininfo_refactoring.data.db.AppDatabase
+import com.dwinging.hanshininfo_refactoring.data.entities.HolidayEntity
+import com.dwinging.hanshininfo_refactoring.data.entities.Holidays
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -21,6 +24,18 @@ suspend fun getEventList(date: LocalDate, context: Context): List<EventList> {
     val startOfMonth = yearMonth.atDay(1).toString()
     val endOfMonth = yearMonth.atEndOfMonth().toString()
     return scheduleDAO.findSchedule(startOfMonth, endOfMonth)
+}
+
+suspend fun getHoliDayList(date: LocalDate, context: Context): List<Holidays> {
+    val holidayDAO = AppDatabase.getDatabase(context).holiDayDao()
+    val yearMonth = YearMonth.from(date)
+    val startOfMonth = yearMonth.atDay(1)
+    val endOfMonth = yearMonth.atEndOfMonth()
+
+    val test = holidayDAO.getAllHolidays()
+    Log.d("holiDay test", test.joinToString { "\n" })
+    Log.d("holiDay test", "${test.size}")
+    return holidayDAO.findHoliday(startOfMonth, endOfMonth)
 }
 
 fun inputEvent(eventList: List<EventList>, date: LocalDate): Array<ArrayList<String>> {

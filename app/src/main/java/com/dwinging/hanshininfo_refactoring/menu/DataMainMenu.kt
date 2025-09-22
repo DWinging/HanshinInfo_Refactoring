@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.dwinging.hanshininfo_refactoring.R
 
+// 메뉴 목록
 enum class MainMenuList {
     // main
     CAMPUS_MAP,
@@ -22,6 +23,7 @@ sealed class MenuItem{
         override val title: String
     ): MenuItem()
 
+    // 하위 메뉴 포함
     data class GroupMenu(
         override val type: MainMenuList,
         override val title: String,

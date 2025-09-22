@@ -11,6 +11,7 @@ import androidx.room.TypeConverters
 import com.dwinging.hanshininfo_refactoring.data.converter.NumberTypeConverter
 import com.dwinging.hanshininfo_refactoring.data.converter.LocalDateConverter
 import com.dwinging.hanshininfo_refactoring.data.dao.BuildingDAO
+import com.dwinging.hanshininfo_refactoring.data.dao.HolidayDAO
 import com.dwinging.hanshininfo_refactoring.data.dao.NumberDAO
 import com.dwinging.hanshininfo_refactoring.data.dao.ScheduleDAO
 import com.dwinging.hanshininfo_refactoring.data.entities.AmenityEntity
@@ -18,8 +19,10 @@ import com.dwinging.hanshininfo_refactoring.data.entities.BuildingEntity
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberEntity
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberType
 import com.dwinging.hanshininfo_refactoring.data.entities.ScheduleEntity
+import com.dwinging.hanshininfo_refactoring.data.entities.HolidayEntity
 import com.dwinging.hanshininfo_refactoring.data.prefs.PrefsManager
 import com.dwinging.hanshininfo_refactoring.data.repository.insertBuildingData
+import com.dwinging.hanshininfo_refactoring.data.repository.insertHolidayData
 import com.dwinging.hanshininfo_refactoring.data.repository.insertNumberData
 import com.dwinging.hanshininfo_refactoring.data.repository.insertScheduleData
 import java.time.DayOfWeek
@@ -31,9 +34,10 @@ import java.time.temporal.TemporalAdjusters
         BuildingEntity::class,
         AmenityEntity::class,
         NumberEntity::class,
-        ScheduleEntity::class
+        ScheduleEntity::class,
+        HolidayEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 
@@ -42,6 +46,7 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun buildingDao(): BuildingDAO
     abstract fun numberDao(): NumberDAO
     abstract fun scheduleDao(): ScheduleDAO
+    abstract fun holiDayDao(): HolidayDAO
 
     companion object {
         @Volatile
@@ -53,7 +58,7 @@ abstract class AppDatabase: RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ).fallbackToDestructiveMigration(true).build()
                 INSTANCE = instance
                 instance
             }
@@ -77,12 +82,18 @@ fun CheckBuildingData(context: Context) {
 @Composable
 fun CheckLastUpdateSchedule(context: Context) {
     val scheduleDAO: ScheduleDAO = remember { AppDatabase.getDatabase(context).scheduleDao() }
+    val holidayDAO: HolidayDAO = remember { AppDatabase.getDatabase(context).holiDayDao() }
     val date = LocalDate.now()
     val year = date.year
     val lastUpdateYear = PrefsManager.checkUpdateSchedule()
     LaunchedEffect(year != lastUpdateYear) {
+        // 해당 년도 학사 일정 저장
         scheduleDAO.clearAllSchedule()
         insertScheduleData(context, scheduleDAO)
+        
+        // 휴일 정보 저장
+        holidayDAO.clearAllHolidayInfo()
+        insertHolidayData(context, year, holidayDAO)
 
         PrefsManager.setUpdateYearSchedule(year)
     }

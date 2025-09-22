@@ -31,8 +31,8 @@ private fun MyApp() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "splash") {
-        composable("splash") { SplashScreen(navController) }
-        composable("main") { MainScreen() }
+        composable("splash") { SplashScreen(navController) } // Splash 화면
+        composable("main") { MainScreen() } // Main 화면
     }
 }
 

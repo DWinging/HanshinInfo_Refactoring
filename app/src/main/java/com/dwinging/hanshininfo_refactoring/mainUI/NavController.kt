@@ -31,24 +31,31 @@ fun AppNavHost(currentPage: MainMenuList, drawerState: DrawerState) {
         navController = navController,
         startDestination = "campus_map_route" // 시작 화면 라우트
     ) {
+        // 학교 지도
         composable("campus_map_route") {
             CampusMapView()
             LaunchedEffect(currentPage) {
                 drawerState.close()
             }
         }
+
+        // 학사 일정
         composable("schedule_route") {
             ScheduleView()
             LaunchedEffect(currentPage) {
                 drawerState.close()
             }
         }
+
+        // 교내 전화번호
         composable("number_ext_route") {
             NumberView(NumberType.NUMBER_EXT)
             LaunchedEffect(currentPage) {
                 drawerState.close()
             }
         }
+
+        // 교수 전화번호
         composable("number_pro_route") {
             NumberView(NumberType.NUMBER_PRO)
             LaunchedEffect(currentPage) {

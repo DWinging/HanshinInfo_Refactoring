@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.dwinging.hanshininfo_refactoring.R
 
+// 다른 앱 연결 메뉴
 enum class MoveMenuList {
     // sub
     HOMEPAGE,
@@ -17,13 +18,15 @@ enum class MoveMenuList {
 sealed class MoveMenuItem{
     abstract val type: MoveMenuList
     abstract val title: String
-
+    
+    // 웹으로 연결
     data class LinkMenu(
         override val type: MoveMenuList,
         override val title: String,
         val url: String
     ): MoveMenuItem()
 
+    // 앱으로 연결
     data class AppMenu(
         override val type: MoveMenuList,
         override val title: String,

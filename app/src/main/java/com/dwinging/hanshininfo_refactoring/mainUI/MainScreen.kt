@@ -25,12 +25,14 @@ fun MainScreen(viewModel: MenuViewModel = viewModel()) {
     val currentPage by viewModel.selectedMenu.collectAsState()
 
     ModalNavigationDrawer(
+        // 메뉴창
         drawerState = drawerState,
         drawerContent = {
             DrawerContent()
         }
     ) {
         Scaffold(
+            // 상단바
             topBar = { MainTopAppBar(
                 currentPage,
                 onMenuClick = {
