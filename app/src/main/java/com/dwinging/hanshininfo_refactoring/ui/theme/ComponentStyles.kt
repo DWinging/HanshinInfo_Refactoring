@@ -1,5 +1,6 @@
 package com.dwinging.hanshininfo_refactoring.ui.theme
 
+import android.R.attr.maxLines
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+
+
 
 object ComponentTextStyles {
 
@@ -67,7 +71,7 @@ object ComponentTextStyles {
         .padding(start = 30.dp, top = 10.dp, end = 10.dp, bottom = 5.dp)
         .fillMaxWidth()
 
-    val TextPadding = Modifier.padding(start = 15.dp, top = 10.dp, end = 15.dp, bottom = 10.dp)
+    val TextPadding = Modifier.padding(5.dp)
     val LabelPadding = Modifier.padding(10.dp)
     val ValuePadding = Modifier.padding(10.dp)
 

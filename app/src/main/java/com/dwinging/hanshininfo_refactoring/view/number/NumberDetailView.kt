@@ -5,9 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
@@ -15,11 +19,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -30,6 +40,7 @@ import com.dwinging.hanshininfo_refactoring.data.entities.NumberDetail
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberType
 import com.dwinging.hanshininfo_refactoring.ui.theme.BlackColor
 import com.dwinging.hanshininfo_refactoring.ui.theme.ComponentTextStyles
+import com.dwinging.hanshininfo_refactoring.ui.theme.Lavender100
 import com.dwinging.hanshininfo_refactoring.ui.theme.Purple200
 
 @Composable
@@ -41,9 +52,11 @@ fun NumberDetail(id: Int, type: NumberType) {
         numberDetail.value = getNumberDetail(id, type, context)
     }
 
-    Column {
+    Column(
+        modifier = Modifier.navigationBarsPadding()
+    ) {
         Title()
-        Content(numberDetail)
+        Content(numberDetail, type)
     }
 }
 
@@ -58,7 +71,7 @@ private fun Title() {
 }
 
 @Composable
-private fun Content(numberDetail: MutableState<NumberDetail?>) {
+private fun Content(numberDetail: MutableState<NumberDetail?>, type: NumberType) {
     val context = LocalContext.current
 
     Surface(modifier = Modifier
@@ -74,7 +87,7 @@ private fun Content(numberDetail: MutableState<NumberDetail?>) {
     ) {
         Column {
             TextRow(label = "부서", value = numberDetail.value?.affiliation)
-            TextRow(label = "업무명", value = numberDetail.value?.department)
+            TextRow(label = if(type == NumberType.NUMBER_EXT) "업무명" else "세부소속", value = numberDetail.value?.department)
             val name = numberDetail.value?.name ?: ""
             if(name.isNotEmpty()) TextRow(label = "이름", value = name)
             TextRow(
@@ -97,30 +110,52 @@ private fun TextRow(
     value: String?,
     onValueClick: (() -> Unit)? = null
 ) {
-    Row {
-        Text(
-            label,
-            style = ComponentTextStyles.LabelText,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-                .background(Purple200)
-                .then(ComponentTextStyles.LabelPadding)
-        )
-        Text(
-            text = value ?: "",
-            style = ComponentTextStyles.ValueText.copy(
-                color = if (label == "전화번호") Color(0xFF1E88E5) else ComponentTextStyles.ValueText.color,
-                textDecoration = if (label == "전화번호") TextDecoration.Underline else null
-            ),
-            textAlign = TextAlign.Start,
-            modifier = if (onValueClick != null) {
-                            Modifier.clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
-                            ) { onValueClick() }
-                        } else { Modifier }
+    var rightSideHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
+
+    Row (
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .heightIn(min = rightSideHeight)
+                .background(Purple200),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                label,
+                style = ComponentTextStyles.LabelText,
+                textAlign = TextAlign.Center,
+                modifier = ComponentTextStyles.LabelPadding
+            )
+        }
+
+        Box(
+            modifier = Modifier
                 .weight(2f)
-                .then (ComponentTextStyles.LabelPadding)
-        )
+                .onSizeChanged {
+                    rightSideHeight = with(density) { it.height.toDp() }
+                },
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = value ?: "",
+                style = ComponentTextStyles.ValueText.copy(
+                    color = if (label == "전화번호") Color(0xFF1E88E5) else ComponentTextStyles.ValueText.color,
+                    textDecoration = if (label == "전화번호") TextDecoration.Underline else null
+                ),
+                textAlign = TextAlign.Start,
+                modifier = (if (onValueClick != null) {
+                    Modifier.clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) { onValueClick() }
+                } else { Modifier })
+                    .fillMaxWidth()
+                    .then (ComponentTextStyles.LabelPadding)
+            )
+        }
+
     }
 }

@@ -37,6 +37,7 @@ data class NumberEntity(
 data class NumberList(
     val id: Int,
     val affiliation: String,
+    val department: String,
     val name: String,
     val number: String
 )

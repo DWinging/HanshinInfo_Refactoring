@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberList
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberType
@@ -40,10 +41,10 @@ fun NumberView(type: NumberType) {
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(NumberDataSheet(false, -1)) }
     val numberList = remember { mutableStateOf<List<NumberList>>(emptyList()) }
+
     LaunchedEffect(type) {
         numberList.value = getAllNumbers(type, context)
     }
-
 
     Column {
         Category(type)
@@ -76,9 +77,9 @@ fun Category(type: NumberType) {
     Row(
         modifier = ComponentTextStyles.ContentTitleStyle
     ) {
-        RowText("부서", 1f)
-        if(type == NumberType.NUMBER_PRO) RowText("이름", 1f)
-        RowText("전화번호", 2f)
+        RowText("부서", 1.25f)
+        if(type == NumberType.NUMBER_PRO) RowText("이름", 2f)
+        else RowText("업무명", 2f)
     }
 }
 
@@ -89,7 +90,7 @@ private fun MainContent(
 ) {
     LazyColumn {
         items(numberList.value) { item ->
-            Row(
+            Column(
                 modifier = ComponentTextStyles.ContentRowStyle
                     .then(Modifier.clickable(
                         indication = null,
@@ -98,10 +99,18 @@ private fun MainContent(
                         onClickItem(item.id)
                     })
             ) {
-                RowText(item.affiliation, 1f)
-                if (item.name.isNotEmpty()) { RowText(item.name, 1f) }
-                RowText(item.number, 2f)
+                Row {
+                    RowText(item.affiliation, 1.25f)
+
+                    if (item.name.isNotEmpty()) RowText(item.name, 2f)
+                    else RowText(item.department, 2f)
+                }
+                Row {
+                    RowText("전화번호 :", 1.25f)
+                    RowText(item.number, 2f)
+                }
             }
+
         }
         item {
             Spacer(modifier = Modifier.height(20.dp))
@@ -117,6 +126,8 @@ fun RowScope.RowText(
     Text(
         text,
         style = ComponentTextStyles.ValueText,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = ComponentTextStyles.TextPadding
             .then(
                 Modifier.weight(weight)

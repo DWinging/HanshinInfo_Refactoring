@@ -17,7 +17,7 @@ interface NumberDAO {
     @Query("""DELETE FROM Number""")
     suspend fun clearAllNumber()
 
-    @Query("""SELECT id, affiliation, name, number FROM Number WHERE type = :type""")
+    @Query("""SELECT id, affiliation, department, name, number FROM Number WHERE type = :type""")
     suspend fun findAllNumber(type: NumberType): List<NumberList>
 
     @Query("""SELECT affiliation, department, name, number, room FROM Number WHERE id = :id AND type = :type""")
