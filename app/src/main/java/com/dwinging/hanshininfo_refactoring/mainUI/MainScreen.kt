@@ -16,13 +16,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dwinging.hanshininfo_refactoring.menu.DrawerContent
 import com.dwinging.hanshininfo_refactoring.menu.MainTopAppBar
 import com.dwinging.hanshininfo_refactoring.menu.MenuViewModel
+import com.dwinging.hanshininfo_refactoring.view.number.NumberViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen(viewModel: MenuViewModel = viewModel()) {
+fun MainScreen(
+    menuViewModel: MenuViewModel = viewModel(),
+    numberViewModel: NumberViewModel = viewModel()
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    val currentPage by viewModel.selectedMenu.collectAsState()
+    val currentPage by menuViewModel.selectedMenu.collectAsState()
+    val isSearchMode: Boolean by menuViewModel.searchMode
+    val searchQuery by menuViewModel.searchQuery
 
     ModalNavigationDrawer(
         // 메뉴창
@@ -35,11 +41,18 @@ fun MainScreen(viewModel: MenuViewModel = viewModel()) {
             // 상단바
             topBar = { MainTopAppBar(
                 currentPage,
-                onMenuClick = {
-                    scope.launch {
-                        drawerState.open()
-                    }
-                }
+                isSearchMode,
+                searchQuery = searchQuery,
+                onQueryChange = { newQuery ->
+                    menuViewModel.onSearchQueryChanged(newQuery)
+                },
+                onSearchConfirm = { numberViewModel.onSearchConfirmed(searchQuery) },
+                onOpenSearchClick = { menuViewModel.openSearchMode() },
+                onCloseSearchClick = {
+                    menuViewModel.closeSearchMode()
+                    numberViewModel.onSearchConfirmed("") },
+                onClearClick = { menuViewModel.onClearQuery() },
+                onMenuClick = { scope.launch { drawerState.open() }}
             )}
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {

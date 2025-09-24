@@ -1,7 +1,9 @@
 package com.dwinging.hanshininfo_refactoring.menu
 
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -16,6 +18,12 @@ class MenuViewModel: ViewModel() {
 
     private val _expandedGroup = mutableStateMapOf<MainMenuList, Boolean>()
     val expandedMap: SnapshotStateMap<MainMenuList, Boolean> get() = _expandedGroup
+
+    private val _searchMode = mutableStateOf(false)
+    val searchMode: State<Boolean> = _searchMode
+
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
 
     // MainMenu 선택 여부
     fun mainMenuSelected(menu: MainMenuList) {
@@ -38,5 +46,23 @@ class MenuViewModel: ViewModel() {
         _expandedGroup.keys.forEach { key ->
             _expandedGroup[key] = false
         }
+    }
+
+    fun onSearchQueryChanged(newQuery: String) {
+        _searchQuery.value = newQuery
+    }
+
+    fun openSearchMode() {
+        _searchQuery.value = ""
+        _searchMode.value = true
+    }
+
+    fun closeSearchMode() {
+        _searchMode.value = false
+        onSearchQueryChanged("")
+    }
+
+    fun onClearQuery() {
+        onSearchQueryChanged("")
     }
 }

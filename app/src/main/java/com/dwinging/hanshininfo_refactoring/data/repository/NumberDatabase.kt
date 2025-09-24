@@ -6,6 +6,7 @@ import android.content.Context
 import com.dwinging.hanshininfo_refactoring.data.dao.NumberDAO
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberEntity
 import com.dwinging.hanshininfo_refactoring.data.entities.NumberType
+import com.dwinging.hanshininfo_refactoring.data.entities.PhoneNumber
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
@@ -32,7 +33,7 @@ suspend fun insertNumberData(context: Context, numberDAO: NumberDAO, type: Numbe
                         affiliation = tds.getOrNull(0)?.text() ?: "",
                         department = tds.getOrNull(1)?.text() ?: "",
                         name = tds.getOrNull(2)?.text() ?: "",
-                        number = tds.getOrNull(3)?.text() ?: "",
+                        number = PhoneNumber(tds.getOrNull(3)?.text() ?: ""),
                         room = tds.getOrNull(4)?.text() ?: ""
                     )
                 )

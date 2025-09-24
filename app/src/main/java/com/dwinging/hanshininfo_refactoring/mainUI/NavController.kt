@@ -3,6 +3,7 @@ package com.dwinging.hanshininfo_refactoring.mainUI
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -49,7 +50,10 @@ fun AppNavHost(currentPage: MainMenuList, drawerState: DrawerState) {
 
         // 교내 전화번호
         composable("number_ext_route") {
-            NumberView(NumberType.NUMBER_EXT)
+            NumberView(
+                NumberType.NUMBER_EXT,
+                viewModel = viewModel()
+            )
             LaunchedEffect(currentPage) {
                 drawerState.close()
             }
@@ -57,7 +61,10 @@ fun AppNavHost(currentPage: MainMenuList, drawerState: DrawerState) {
 
         // 교수 전화번호
         composable("number_pro_route") {
-            NumberView(NumberType.NUMBER_PRO)
+            NumberView(
+                NumberType.NUMBER_PRO,
+                viewModel = viewModel()
+            )
             LaunchedEffect(currentPage) {
                 drawerState.close()
             }

@@ -28,7 +28,7 @@ data class NumberEntity(
     val name: String,
 
     @ColumnInfo(name="number")
-    val number: String,
+    val number: PhoneNumber,
 
     @ColumnInfo(name="room")
     val room: String
@@ -39,13 +39,15 @@ data class NumberList(
     val affiliation: String,
     val department: String,
     val name: String,
-    val number: String
+    val number: PhoneNumber
 )
 
 data class NumberDetail(
     val affiliation: String,
     val department: String,
     val name: String,
-    val number: String,
+    val number: PhoneNumber,
     val room: String
 )
+
+data class PhoneNumber(val value: String)

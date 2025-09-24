@@ -11,9 +11,9 @@ data class NumberDataSheet(
     val id: Int
 )
 
-suspend fun getAllNumbers(type: NumberType, context: Context): List<NumberList> {
+suspend fun searchNumbers(type: NumberType, query: String, context: Context): List<NumberList> {
     val numberDAO = AppDatabase.getDatabase(context).numberDao()
-    return numberDAO.findAllNumber(type)
+    return numberDAO.getNumbersByQuery(type, query)
 }
 
 suspend fun getNumberDetail(id: Int, type: NumberType, context: Context): NumberDetail? {

@@ -36,8 +36,6 @@ fun ScheduleView() {
         eventList.value = getEventList(date.value, context)
         val holidays = getHoliDayList(date.value, context)
         val temp: Set<Int> = holidays.map { it.date.dayOfMonth }.toSet()
-        Log.d("dayTest", temp.joinToString { " " })
-        Log.d("dayTest", date.value.toString())
         holiDaySet.clear()
         holiDaySet.addAll(temp)
     }

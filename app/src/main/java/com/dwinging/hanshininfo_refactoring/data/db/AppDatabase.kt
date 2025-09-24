@@ -10,6 +10,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.dwinging.hanshininfo_refactoring.data.converter.NumberTypeConverter
 import com.dwinging.hanshininfo_refactoring.data.converter.LocalDateConverter
+import com.dwinging.hanshininfo_refactoring.data.converter.NumberFormatConverter
 import com.dwinging.hanshininfo_refactoring.data.dao.BuildingDAO
 import com.dwinging.hanshininfo_refactoring.data.dao.HolidayDAO
 import com.dwinging.hanshininfo_refactoring.data.dao.NumberDAO
@@ -37,11 +38,11 @@ import java.time.temporal.TemporalAdjusters
         ScheduleEntity::class,
         HolidayEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 
-@TypeConverters(LocalDateConverter::class, NumberTypeConverter::class)
+@TypeConverters(LocalDateConverter::class, NumberTypeConverter::class, NumberFormatConverter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun buildingDao(): BuildingDAO
     abstract fun numberDao(): NumberDAO

@@ -44,19 +44,14 @@ import com.dwinging.hanshininfo_refactoring.ui.theme.Lavender100
 import com.dwinging.hanshininfo_refactoring.ui.theme.Purple200
 
 @Composable
-fun NumberDetail(id: Int, type: NumberType) {
-    val context = LocalContext.current
-    val numberDetail = remember { mutableStateOf<NumberDetail?>(null) }
-
-    LaunchedEffect(id) {
-        numberDetail.value = getNumberDetail(id, type, context)
-    }
-
+fun NumberDetail(numberDetail: NumberDetail?, type: NumberType) {
     Column(
         modifier = Modifier.navigationBarsPadding()
     ) {
         Title()
-        Content(numberDetail, type)
+        if(numberDetail != null) {
+            Content(numberDetail, type)
+        }
     }
 }
 
@@ -71,7 +66,7 @@ private fun Title() {
 }
 
 @Composable
-private fun Content(numberDetail: MutableState<NumberDetail?>, type: NumberType) {
+private fun Content(numberDetail: NumberDetail?, type: NumberType) {
     val context = LocalContext.current
 
     Surface(modifier = Modifier
@@ -86,20 +81,20 @@ private fun Content(numberDetail: MutableState<NumberDetail?>, type: NumberType)
         shadowElevation = 5.dp
     ) {
         Column {
-            TextRow(label = "부서", value = numberDetail.value?.affiliation)
-            TextRow(label = if(type == NumberType.NUMBER_EXT) "업무명" else "세부소속", value = numberDetail.value?.department)
-            val name = numberDetail.value?.name ?: ""
+            TextRow(label = "부서", value = numberDetail?.affiliation)
+            TextRow(label = if(type == NumberType.NUMBER_EXT) "업무명" else "세부소속", value = numberDetail?.department)
+            val name = numberDetail?.name ?: ""
             if(name.isNotEmpty()) TextRow(label = "이름", value = name)
             TextRow(
                 label = "전화번호",
-                value = numberDetail.value?.number,
+                value = numberDetail?.number?.value,
                 onValueClick = {
                     val intent = Intent(Intent.ACTION_DIAL).apply {
-                        data = "tel:${numberDetail.value?.number}".toUri()
+                        data = "tel:${numberDetail?.number?.value}".toUri()
                     }
                     context.startActivity(intent)
                 })
-            TextRow(label = "실번호", value = numberDetail.value?.room)
+            TextRow(label = "실번호", value = numberDetail?.room)
         }
     }
 }
